@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Susan Gusman | Strategic Book Specialist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-pale: #F5E6C0;
+    --dark: #0D0D0D;
+    --dark-2: #161616;
+    --dark-3: #1F1F1F;
+    --dark-4: #2A2A2A;
+    --cream: #FAF6EF;
+    --cream-2: #F0E9DC;
+    --text-light: #C8C0B0;
+    --text-mid: #8A7F70;
+    --white: #FFFFFF;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--cream);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--gold);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 99999;
+    transition: transform 0.15s ease, background 0.2s;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-follower {
+    width: 36px; height: 36px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 99998;
+    transition: transform 0.35s ease, opacity 0.3s;
+    transform: translate(-50%, -50%);
+    opacity: 0.5;
+  }
+
+  #preloader {
+    position: fixed; inset: 0;
+    background: var(--dark);
+    z-index: 99997;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+  #preloader.hide { opacity: 0; visibility: hidden; }
+  .preloader-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--gold);
+    letter-spacing: 0.3em;
+    animation: pulse-gold 1.5s ease-in-out infinite;
+  }
+  .preloader-line {
+    width: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin-top: 1.5rem;
+    animation: expand-line 2s ease forwards 0.3s;
+  }
+  .preloader-sub {
+    font-family: 'Jost', sans-serif;
+    font-weight: 200;
+    font-size: 0.75rem;
+    letter-spacing: 0.4em;
+    color: var(--text-light);
+    margin-top: 1rem;
+    opacity: 0;
+    animation: fade-in 1s ease forwards 0.8s;
+    text-transform: uppercase;
+  }
+  @keyframes pulse-gold { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  @keyframes expand-line { to{width:220px} }
+  @keyframes fade-in { to{opacity:1} }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 1.4rem 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: background 0.4s, padding 0.4s, backdrop-filter 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(13,13,13,0.92);
+    backdrop-filter: blur(18px);
+    padding: 1rem 5%;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    font-weight: 400;
+    position: relative;
+    transition: color 0.3s;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold) !important;
+    padding: 0.5rem 1.4rem;
+    font-size: 0.7rem !important;
+    letter-spacing: 0.2em;
+    transition: background 0.3s, color 0.3s !important;
+  }
+  .nav-cta:hover { background: var(--gold) !important; color: var(--dark) !important; }
+  .nav-cta::after { display: none !important; }
+
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 28px; height: 1px; background: var(--gold); transition: all 0.3s; display: block; }
+
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    padding: 0 5%;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(201,168,76,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(201,168,76,0.05) 0%, transparent 50%),
+                var(--dark);
+  }
+  .hero-grain {
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .hero-lines {
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 80px, rgba(201,168,76,0.03) 80px, rgba(201,168,76,0.03) 81px);
+    pointer-events: none;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    max-width: 700px;
+    padding-top: 6rem;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    border: 1px solid rgba(201,168,76,0.4);
+    padding: 0.4rem 1rem;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: slide-up 0.8s ease forwards 0.5s;
+  }
+  .hero-badge span { font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); }
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--gold); border-radius: 50%;
+    animation: pulse-gold 1.5s ease infinite;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--cream);
+    opacity: 0;
+    animation: slide-up 0.9s ease forwards 0.7s;
+  }
+  .hero-title em { font-style: italic; color: var(--gold); }
+  .hero-sub {
+    margin-top: 1.8rem;
+    font-size: 1.05rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--text-light);
+    max-width: 560px;
+    opacity: 0;
+    animation: slide-up 0.9s ease forwards 0.9s;
+  }
+  .hero-trust {
+    margin-top: 1.5rem;
+    display: flex; gap: 2rem; flex-wrap: wrap;
+    opacity: 0;
+    animation: slide-up 0.9s ease forwards 1.1s;
+  }
+  .hero-trust-item {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.72rem; letter-spacing: 0.1em; color: var(--text-mid);
+  }
+  .hero-trust-item::before { content: '✦'; color: var(--gold); font-size: 0.6rem; }
+  .hero-cta {
+    margin-top: 2.5rem;
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    opacity: 0;
+    animation: slide-up 0.9s ease forwards 1.3s;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 0.7rem;
+    background: var(--gold);
+    color: var(--dark);
+    text-decoration: none;
+    padding: 0.95rem 2.2rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--gold-light);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+  }
+  .btn-primary:hover::before { transform: translateX(0); }
+  .btn-primary:hover { box-shadow: 0 10px 40px rgba(201,168,76,0.3); transform: translateY(-2px); }
+  .btn-primary span { position: relative; z-index: 1; }
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 0.7rem;
+    border: 1px solid rgba(201,168,76,0.5);
+    color: var(--cream);
+    text-decoration: none;
+    padding: 0.95rem 2.2rem;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    transition: border-color 0.3s, color 0.3s, background 0.3s;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.05); }
+
+  .hero-image-col {
+    position: absolute; right: 0; top: 0; bottom: 0;
+    width: 42%;
+    overflow: hidden;
+    opacity: 0;
+    animation: fade-in 1.2s ease forwards 1s;
+  }
+  .hero-image-col img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    filter: grayscale(20%) contrast(1.05);
+  }
+  .hero-image-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to right, var(--dark) 0%, rgba(13,13,13,0.3) 50%, transparent 100%),
+                linear-gradient(to top, var(--dark) 0%, transparent 40%);
+  }
+  .hero-scroll {
+    position: absolute; bottom: 2.5rem; left: 5%;
+    display: flex; align-items: center; gap: 1rem;
+    opacity: 0;
+    animation: fade-in 1s ease forwards 2s;
+  }
+  .hero-scroll span { font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--text-mid); }
+  .scroll-line {
+    width: 60px; height: 1px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    animation: scroll-pulse 2s ease infinite;
+  }
+  @keyframes scroll-pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+  @keyframes slide-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+  section { padding: 7rem 5%; position: relative; overflow: hidden; }
+  .section-label {
+    font-size: 0.65rem; letter-spacing: 0.5em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 1rem; display: block;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 4vw, 3.8rem);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--cream);
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+  .section-divider { width: 60px; height: 1px; background: var(--gold); margin: 1.5rem 0; }
+  .section-intro { font-size: 1rem; line-height: 1.9; color: var(--text-light); max-width: 640px; }
+
+  #trust-bar {
+    padding: 2.5rem 5%;
+    background: var(--dark-2);
+    border-top: 1px solid rgba(201,168,76,0.1);
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+  }
+  .trust-bar-inner { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 3rem; }
+  .trust-item { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; text-align: center; }
+  .trust-number { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 600; color: var(--gold); line-height: 1; }
+  .trust-label { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-mid); }
+  .trust-sep { width: 1px; height: 50px; background: rgba(201,168,76,0.2); }
+
+  #about { background: var(--dark); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; margin-top: 4rem; }
+  .about-image-wrap { position: relative; }
+  .about-image-frame { position: relative; width: 100%; aspect-ratio: 3/4; overflow: hidden; }
+  .about-image-frame img { width: 100%; height: 100%; object-fit: cover; object-position: top center; filter: grayscale(15%) contrast(1.05); transition: transform 0.6s ease; }
+  .about-image-frame:hover img { transform: scale(1.04); }
+  .about-image-border { position: absolute; top: -12px; left: -12px; right: 12px; bottom: 12px; border: 1px solid rgba(201,168,76,0.3); pointer-events: none; }
+  .about-gold-accent { position: absolute; bottom: -20px; right: -20px; width: 120px; height: 120px; background: var(--gold); opacity: 0.07; border-radius: 50%; }
+  .about-badge-float {
+    position: absolute; bottom: 2rem; left: -2rem;
+    background: var(--dark-2);
+    border: 1px solid rgba(201,168,76,0.3);
+    padding: 1.2rem 1.5rem;
+    display: flex; flex-direction: column; gap: 0.3rem;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .about-badge-float strong { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--gold); }
+  .about-badge-float span { font-size: 0.65rem; letter-spacing: 0.2em; color: var(--text-light); text-transform: uppercase; }
+  .about-content p { font-size: 1rem; line-height: 2; color: var(--text-light); margin-bottom: 1.4rem; }
+  .about-signature { margin-top: 2rem; font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-style: italic; color: var(--gold); }
+  .about-email-link { display: inline-flex; align-items: center; gap: 0.6rem; margin-top: 0.5rem; color: var(--text-mid); text-decoration: none; font-size: 0.8rem; letter-spacing: 0.1em; transition: color 0.3s; }
+  .about-email-link:hover { color: var(--gold); }
+
+  #services { background: var(--dark-2); }
+  .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5px; margin-top: 4rem; background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.1); }
+  .service-card { background: var(--dark-2); padding: 2.8rem; position: relative; overflow: hidden; transition: background 0.4s; }
+  .service-card::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 2px; background: var(--gold); transition: width 0.5s ease; }
+  .service-card:hover::before { width: 100%; }
+  .service-card:hover { background: var(--dark-3); }
+  .service-num { font-family: 'Cormorant Garamond', serif; font-size: 4rem; font-weight: 300; color: rgba(201,168,76,0.1); line-height: 1; margin-bottom: 1.2rem; transition: color 0.4s; }
+  .service-card:hover .service-num { color: rgba(201,168,76,0.2); }
+  .service-title { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 500; color: var(--cream); margin-bottom: 1rem; }
+  .service-desc { font-size: 0.9rem; line-height: 1.9; color: var(--text-light); }
+
+  #how { background: var(--dark); }
+  .how-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0; margin-top: 4rem; position: relative; }
+  .how-grid::before { content: ''; position: absolute; top: 3rem; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3), transparent); }
+  .how-step { padding: 3rem 2.5rem; position: relative; border-right: 1px solid rgba(201,168,76,0.1); }
+  .how-step:last-child { border-right: none; }
+  .how-step-num { font-family: 'Cormorant Garamond', serif; font-size: 5rem; font-weight: 300; color: rgba(201,168,76,0.08); line-height: 1; position: absolute; top: 1rem; right: 1.5rem; }
+  .how-step-icon { width: 56px; height: 56px; border: 1px solid rgba(201,168,76,0.4); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; color: var(--gold); font-size: 1.3rem; transition: background 0.3s, border-color 0.3s; }
+  .how-step:hover .how-step-icon { background: var(--gold); color: var(--dark); border-color: var(--gold); }
+  .how-step-title { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 500; color: var(--cream); margin-bottom: 0.8rem; }
+  .how-step-desc { font-size: 0.88rem; line-height: 1.9; color: var(--text-light); }
+  .how-trust-note { margin-top: 4rem; padding: 2rem 2.5rem; border: 1px solid rgba(201,168,76,0.2); background: rgba(201,168,76,0.03); display: flex; align-items: center; gap: 1.5rem; }
+  .how-trust-note .icon { color: var(--gold); font-size: 1.5rem; flex-shrink: 0; }
+  .how-trust-note p { font-size: 0.9rem; line-height: 1.8; color: var(--text-light); }
+  .how-trust-note strong { color: var(--cream); }
+
+  #stats { background: linear-gradient(135deg, var(--dark-2) 0%, var(--dark-3) 100%); border-top: 1px solid rgba(201,168,76,0.1); border-bottom: 1px solid rgba(201,168,76,0.1); }
+  .stats-inner { display: flex; flex-wrap: wrap; gap: 0; }
+  .stat-block { flex: 1; min-width: 200px; padding: 3rem 2rem; text-align: center; border-right: 1px solid rgba(201,168,76,0.1); position: relative; transition: background 0.3s; }
+  .stat-block:last-child { border-right: none; }
+  .stat-block:hover { background: rgba(201,168,76,0.04); }
+  .stat-val { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; font-weight: 600; color: var(--gold); line-height: 1; display: block; }
+  .stat-lbl { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-mid); margin-top: 0.6rem; display: block; }
+  #stats .section-title { margin-bottom: 3rem; }
+
+  #testimonials { background: var(--dark); }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2rem; margin-top: 4rem; }
+  .testimonial-card { background: var(--dark-2); border: 1px solid rgba(201,168,76,0.12); padding: 2.5rem; position: relative; transition: border-color 0.4s, transform 0.4s, box-shadow 0.4s; }
+  .testimonial-card:hover { border-color: rgba(201,168,76,0.35); transform: translateY(-6px); box-shadow: 0 30px 80px rgba(0,0,0,0.4); }
+  .testimonial-quote { font-family: 'Cormorant Garamond', serif; font-size: 5rem; color: rgba(201,168,76,0.15); line-height: 0.5; margin-bottom: 1.5rem; }
+  .testimonial-text { font-size: 0.95rem; line-height: 1.95; color: var(--text-light); font-style: italic; margin-bottom: 2rem; }
+  .testimonial-author { display: flex; align-items: center; gap: 1.2rem; padding-top: 1.5rem; border-top: 1px solid rgba(201,168,76,0.1); }
+  .author-pic { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(201,168,76,0.4); flex-shrink: 0; filter: grayscale(20%); transition: filter 0.3s, border-color 0.3s; }
+  .testimonial-card:hover .author-pic { filter: grayscale(0%); border-color: var(--gold); }
+  .author-info { flex: 1; }
+  .author-name { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 500; color: var(--cream); display: block; }
+  .author-genre { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-top: 0.2rem; display: block; }
+  .author-email-link { font-size: 0.72rem; color: var(--text-mid); text-decoration: none; transition: color 0.3s; display: block; margin-top: 0.2rem; }
+  .author-email-link:hover { color: var(--gold); }
+  .stars { color: var(--gold); font-size: 0.75rem; margin-bottom: 1rem; letter-spacing: 0.1em; }
+  .book-thumb-wrap { margin-top: 1.5rem; display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+  .book-thumb-label { font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-mid); }
+  .book-thumb { width: 80px; height: 110px; object-fit: cover; border: 1px solid rgba(201,168,76,0.2); transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; }
+  .book-thumb:hover { transform: scale(1.05) rotate(-1deg); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+  .amazon-btn { display: inline-flex; align-items: center; gap: 0.4rem; background: #FF9900; color: #000; text-decoration: none; font-size: 0.62rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.35rem 0.8rem; transition: background 0.3s, transform 0.2s; border-radius: 2px; }
+  .amazon-btn:hover { background: #e68a00; transform: translateY(-1px); }
+  .amazon-logo { font-size: 0.9rem; }
+
+  #books { background: var(--dark-2); }
+  .books-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 2rem; margin-top: 4rem; }
+  .book-card { display: flex; flex-direction: column; gap: 1rem; text-align: center; }
+  .book-cover-wrap { position: relative; overflow: hidden; aspect-ratio: 2/3; cursor: pointer; }
+  .book-cover-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; filter: brightness(0.9); }
+  .book-cover-wrap:hover img { transform: scale(1.06); filter: brightness(1); }
+  .book-cover-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.6); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6rem; opacity: 0; transition: opacity 0.3s; }
+  .book-cover-wrap:hover .book-cover-overlay { opacity: 1; }
+  .book-card-name { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--cream); }
+  .book-card-author { font-size: 0.7rem; color: var(--text-mid); letter-spacing: 0.1em; }
+
+  #mid-banner { padding: 6rem 5%; background: var(--dark-3); position: relative; overflow: hidden; }
+  .mid-banner-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .mid-banner-image { aspect-ratio: 4/5; overflow: hidden; position: relative; }
+  .mid-banner-image img { width: 100%; height: 100%; object-fit: cover; object-position: top; filter: grayscale(30%) sepia(10%); }
+  .mid-banner-image::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(31,31,31,0.6) 0%, transparent 60%); }
+  .mid-banner-quote { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem, 3vw, 3rem); font-weight: 300; line-height: 1.4; color: var(--cream); font-style: italic; }
+  .mid-banner-quote strong { color: var(--gold); font-style: normal; }
+  .mid-banner-sub { margin-top: 1.5rem; font-size: 0.95rem; line-height: 1.9; color: var(--text-light); }
+
+  #faq { background: var(--dark); }
+  .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(201,168,76,0.08); margin-top: 4rem; border: 1px solid rgba(201,168,76,0.08); }
+  .faq-item { background: var(--dark); padding: 2.2rem 2.5rem; cursor: pointer; transition: background 0.3s; position: relative; }
+  .faq-item:hover { background: var(--dark-2); }
+  .faq-item.active { background: var(--dark-3); }
+  .faq-q { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 500; color: var(--cream); margin-bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .faq-icon { color: var(--gold); font-size: 1.2rem; flex-shrink: 0; transition: transform 0.3s; }
+  .faq-item.active .faq-icon { transform: rotate(45deg); }
+  .faq-a { font-size: 0.88rem; line-height: 1.9; color: var(--text-light); max-height: 0; overflow: hidden; transition: max-height 0.4s ease, margin-top 0.3s; }
+  .faq-item.active .faq-a { max-height: 200px; margin-top: 1rem; }
+
+  #resource { background: linear-gradient(135deg, var(--dark-2), var(--dark-3)); border-top: 1px solid rgba(201,168,76,0.1); padding: 7rem 5%; }
+  .resource-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .resource-box { background: var(--dark-4); border: 1px solid rgba(201,168,76,0.25); padding: 3rem; position: relative; overflow: hidden; }
+  .resource-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold)); }
+  .resource-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 400; color: var(--cream); margin-bottom: 1rem; }
+  .resource-title em { color: var(--gold); font-style: italic; }
+  .resource-desc { font-size: 0.9rem; line-height: 1.9; color: var(--text-light); margin-bottom: 1.5rem; }
+  .resource-steps { list-style: none; margin-bottom: 2rem; }
+  .resource-steps li { display: flex; align-items: flex-start; gap: 0.8rem; font-size: 0.85rem; color: var(--text-light); line-height: 1.7; margin-bottom: 0.6rem; }
+  .resource-steps li::before { content: '✦'; color: var(--gold); font-size: 0.6rem; margin-top: 0.3rem; flex-shrink: 0; }
+
+  #contact { background: var(--dark); }
+  .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; margin-top: 4rem; }
+  .contact-info p { font-size: 1rem; line-height: 1.9; color: var(--text-light); margin-bottom: 1.5rem; }
+  .contact-detail { display: flex; align-items: center; gap: 1rem; padding: 1.2rem 0; border-bottom: 1px solid rgba(201,168,76,0.1); text-decoration: none; transition: border-color 0.3s; }
+  .contact-detail:hover { border-color: rgba(201,168,76,0.4); }
+  .contact-detail-icon { width: 44px; height: 44px; border: 1px solid rgba(201,168,76,0.3); display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 1rem; flex-shrink: 0; transition: background 0.3s; }
+  .contact-detail:hover .contact-detail-icon { background: var(--gold); color: var(--dark); }
+  .contact-detail-text { display: flex; flex-direction: column; }
+  .contact-detail-label { font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-mid); }
+  .contact-detail-value { font-size: 0.9rem; color: var(--cream); margin-top: 0.15rem; }
+
+  .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+  .form-group label { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-mid); }
+  .form-group input, .form-group textarea, .form-group select { background: var(--dark-2); border: 1px solid rgba(201,168,76,0.2); color: var(--cream); padding: 0.9rem 1.1rem; font-family: 'Jost', sans-serif; font-size: 0.9rem; font-weight: 300; outline: none; transition: border-color 0.3s; resize: none; }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--gold); }
+  .form-group select option { background: var(--dark-2); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-note { font-size: 0.72rem; color: var(--text-mid); line-height: 1.7; padding: 0.8rem 1rem; border-left: 2px solid rgba(201,168,76,0.3); }
+  .form-success { display: none; padding: 1.5rem; border: 1px solid rgba(201,168,76,0.4); background: rgba(201,168,76,0.05); color: var(--gold); font-size: 0.9rem; line-height: 1.7; text-align: center; }
+
+  #final-cta { position: relative; overflow: hidden; padding: 8rem 5%; background: var(--dark-2); text-align: center; }
+  .final-cta-bg-img { position: absolute; inset: 0; }
+  .final-cta-bg-img img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; opacity: 0.08; filter: grayscale(100%); }
+  .final-cta-overlay { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(201,168,76,0.06) 0%, var(--dark-2) 70%); }
+  .final-cta-inner { position: relative; z-index: 2; }
+  .final-cta-inner .section-title { font-size: clamp(2.5rem, 5vw, 4.5rem); }
+  .final-cta-sub { font-size: 1.1rem; line-height: 1.9; color: var(--text-light); max-width: 600px; margin: 1.5rem auto 2.5rem; }
+
+  footer { background: var(--dark); border-top: 1px solid rgba(201,168,76,0.1); padding: 4rem 5% 2rem; }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4rem; padding-bottom: 3rem; border-bottom: 1px solid rgba(201,168,76,0.1); }
+  .footer-brand { display: flex; flex-direction: column; gap: 1rem; }
+  .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--gold); }
+  .footer-tagline { font-size: 0.85rem; color: var(--text-mid); line-height: 1.7; max-width: 280px; }
+  .footer-email { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--gold); text-decoration: none; font-size: 0.85rem; margin-top: 0.5rem; transition: opacity 0.3s; }
+  .footer-email:hover { opacity: 0.7; }
+  .footer-col h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--cream); margin-bottom: 1.2rem; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+  .footer-links a { color: var(--text-mid); text-decoration: none; font-size: 0.82rem; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 2rem; flex-wrap: wrap; gap: 1rem; }
+  .footer-bottom p { font-size: 0.72rem; color: var(--text-mid); }
+  .footer-stars { color: var(--gold); font-size: 0.7rem; letter-spacing: 0.2em; }
+
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal-left.visible { opacity: 1; transform: translateX(0); }
+  .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal-right.visible { opacity: 1; transform: translateX(0); }
+  .reveal-scale { opacity: 0; transform: scale(0.92); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal-scale.visible { opacity: 1; transform: scale(1); }
+  .delay-1 { transition-delay: 0.1s !important; }
+  .delay-2 { transition-delay: 0.2s !important; }
+  .delay-3 { transition-delay: 0.3s !important; }
+  .delay-4 { transition-delay: 0.4s !important; }
+  .delay-5 { transition-delay: 0.5s !important; }
+  .delay-6 { transition-delay: 0.6s !important; }
+
+  .mobile-nav { position: fixed; inset: 0; background: var(--dark); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; transform: translateY(-100%); transition: transform 0.5s ease; }
+  .mobile-nav.open { transform: translateY(0); }
+  .mobile-nav a { color: var(--cream); text-decoration: none; font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; transition: color 0.3s; }
+  .mobile-nav a:hover { color: var(--gold); }
+  .mobile-nav-close { position: absolute; top: 2rem; right: 5%; color: var(--gold); font-size: 2rem; cursor: pointer; background: none; border: none; }
+
+  @media (max-width: 900px) {
+    .about-grid, .mid-banner-grid, .resource-inner, .contact-inner, .footer-top { grid-template-columns: 1fr; gap: 3rem; }
+    .hero-image-col { display: none; }
+    .hero-content { max-width: 100%; }
+    .faq-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .about-badge-float { left: 0; bottom: 0; }
+    .how-grid::before { display: none; }
+    .how-step { border-right: none; border-bottom: 1px solid rgba(201,168,76,0.1); }
+    .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .trust-sep { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-follower" id="cursorFollower"></div>
+
+<div id="preloader">
+  <div class="preloader-logo">SG</div>
+  <div class="preloader-line"></div>
+  <div class="preloader-sub">Strategic Book Specialist</div>
+</div>
+
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" onclick="closeMobileNav()">&#x2715;</button>
+  <a href="#about" onclick="closeMobileNav()">About</a>
+  <a href="#services" onclick="closeMobileNav()">Services</a>
+  <a href="#how" onclick="closeMobileNav()">Process</a>
+  <a href="#testimonials" onclick="closeMobileNav()">Authors</a>
+  <a href="#faq" onclick="closeMobileNav()">FAQ</a>
+  <a href="#contact" onclick="closeMobileNav()">Contact</a>
+</div>
+
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">Susan Gusman</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#how">Process</a></li>
+    <li><a href="#testimonials">Authors</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contact" class="nav-cta">Get Started</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="openMobileNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-lines"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span>Strategic Book Specialist</span></div>
+    <h1 class="hero-title">Your Book Deserves<br>to Be <em>Seen, Read</em><br>and Remembered</h1>
+    <p class="hero-sub">Susan Gusman helps authors build powerful visibility, attract the right readers, and turn their book into a long-term asset that generates consistent sales and lasting credibility.</p>
+    <div class="hero-trust">
+      <div class="hero-trust-item">50+ Authors Served</div>
+      <div class="hero-trust-item">100+ Books Launched</div>
+      <div class="hero-trust-item">5-Star Results</div>
+      <div class="hero-trust-item">100% Email-Based</div>
+    </div>
+    <div class="hero-cta">
+      <a href="mailto:susangusman8@gmail.com?subject=Book%20Visibility%20Inquiry" class="btn-primary"><span>&#x2709; Start Your Journey</span></a>
+      <a href="#services" class="btn-outline">View Services</a>
+    </div>
+  </div>
+  <div class="hero-image-col">
+    <img src="susan gusman.png" alt="Susan Gusman - Strategic Book Specialist">
+    <div class="hero-image-overlay"></div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll to Explore</span>
+  </div>
+</section>
+
+<div id="trust-bar">
+  <div class="trust-bar-inner">
+    <div class="trust-item reveal">
+      <span class="trust-number" data-count="50">0</span>
+      <span class="trust-label">Authors Served</span>
+    </div>
+    <div class="trust-sep"></div>
+    <div class="trust-item reveal delay-1">
+      <span class="trust-number" data-count="100">0</span>
+      <span class="trust-label">Books Launched</span>
+    </div>
+    <div class="trust-sep"></div>
+    <div class="trust-item reveal delay-2">
+      <span class="trust-number" data-count="15">0</span>
+      <span class="trust-label">Genres Covered</span>
+    </div>
+    <div class="trust-sep"></div>
+    <div class="trust-item reveal delay-3">
+      <span class="trust-number" data-count="5">0</span>
+      <span class="trust-label">Star Rating</span>
+    </div>
+    <div class="trust-sep"></div>
+    <div class="trust-item reveal delay-4">
+      <span class="trust-number">100%</span>
+      <span class="trust-label">Email-Based and Documented</span>
+    </div>
+  </div>
+</div>
+
+<section id="about">
+  <div class="about-grid">
+    <div class="about-image-wrap reveal-left">
+      <div class="about-image-frame">
+        <img src="susan gusman.png" alt="Susan Gusman">
+        <div class="about-image-border"></div>
+        <div class="about-gold-accent"></div>
+      </div>
+      <div class="about-badge-float">
+        <strong>50+</strong>
+        <span>Authors Transformed</span>
+      </div>
+    </div>
+    <div class="about-content reveal-right">
+      <span class="section-label">About Susan Gusman</span>
+      <h2 class="section-title">The <em>Strategist</em> Behind Successful Books</h2>
+      <div class="section-divider"></div>
+      <p>My name is Susan Gusman and I have dedicated my career to one mission: making sure great books do not go unnoticed. I am a Strategic Book Specialist with deep expertise in author branding, book visibility, audience development, and sales strategy.</p>
+      <p>Over the years I have worked with authors across fiction, non-fiction, self-help, business, memoir, and more. I have seen firsthand what separates a book that sells from a book that sits. The difference is never just the writing. It is strategy, positioning, visibility, and consistent execution.</p>
+      <p>I started this work because I met too many talented authors who poured their hearts into their books only to feel invisible after publishing. That should never happen. Every book has a reader. My job is to make sure they find each other.</p>
+      <p>What makes my approach different is that everything we do together is handled through email. No rushed conversations. No vague verbal agreements. Every strategy, every plan, every update is written, documented, and saved. Full transparency. Full accountability.</p>
+      <div class="about-signature">Susan Gusman</div>
+      <a href="mailto:susangusman8@gmail.com" class="about-email-link">&#x2709; susangusman8@gmail.com</a>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div style="max-width:600px;">
+    <span class="section-label reveal">What I Offer</span>
+    <h2 class="section-title reveal delay-1">Comprehensive Services <em>Built for Authors</em></h2>
+    <div class="section-divider reveal delay-2"></div>
+    <p class="section-intro reveal delay-2">Every service is fully customized to your book, your audience, your genre, and your goals. Here is exactly what I do for authors who are serious about their success.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-num">01</div>
+      <div class="service-title">Book Visibility Strategy</div>
+      <p class="service-desc">Most books fail not because they are bad but because no one knows they exist. I build a complete, customized visibility roadmap for your book that identifies where your readers are, how to reach them, what platforms to prioritize, and how to position your book so it stands out in a crowded market. You receive a detailed written strategy delivered straight to your inbox.</p>
+    </div>
+    <div class="service-card reveal delay-1">
+      <div class="service-num">02</div>
+      <div class="service-title">Author Brand Building</div>
+      <p class="service-desc">Readers do not just buy books. They buy authors. Your personal brand as an author is one of your most powerful sales tools. I help you define who you are as an author, what you stand for, and how to communicate that consistently across every platform. A strong author brand creates trust, loyalty, and long-term sales that go beyond a single book.</p>
+    </div>
+    <div class="service-card reveal delay-2">
+      <div class="service-num">03</div>
+      <div class="service-title">Book Launch Planning</div>
+      <p class="service-desc">A successful book launch does not happen by accident. It is planned weeks or months in advance with precision and purpose. I design a full pre-launch, launch, and post-launch strategy that builds anticipation, drives sales on release day, and keeps momentum going long after the initial excitement. Every step is communicated and documented via email.</p>
+    </div>
+    <div class="service-card reveal delay-1">
+      <div class="service-num">04</div>
+      <div class="service-title">Audience Growth and Reader Development</div>
+      <p class="service-desc">Your audience is your most valuable long-term asset as an author. I help you identify, attract, and grow a loyal readership that is genuinely interested in your work. This is not about vanity metrics or empty followers. This is about building a real community of readers who buy your books, recommend them to others, and follow your career for years to come.</p>
+    </div>
+    <div class="service-card reveal delay-2">
+      <div class="service-num">05</div>
+      <div class="service-title">Content and Messaging Strategy</div>
+      <p class="service-desc">The words you use to describe your book matter enormously. A weak book description, a confusing tagline, or an unclear author bio can silently kill your sales. I craft compelling, conversion-focused messaging for your book title positioning, book description, author bio, and outreach so that every word works hard to turn interest into purchases.</p>
+    </div>
+    <div class="service-card reveal delay-3">
+      <div class="service-num">06</div>
+      <div class="service-title">Book Sales Optimization</div>
+      <p class="service-desc">Already published but not seeing the sales you expected? I audit your current book presence, identify the gaps, and build a targeted action plan to improve your sales performance. This includes reviewing your cover positioning, description, pricing strategy, reader reviews, and visibility channels. You receive a full written report with actionable recommendations.</p>
+    </div>
+    <div class="service-card reveal delay-2">
+      <div class="service-num">07</div>
+      <div class="service-title">Multi-Book and Series Strategy</div>
+      <p class="service-desc">If you are writing a series or planning multiple books, the strategy changes completely. I help you build a long-term author career plan that connects your books, grows your audience between releases, and maximizes the lifetime value of every reader you attract. Your entire body of work becomes a system that sells itself.</p>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <span class="section-label reveal">The Process</span>
+  <h2 class="section-title reveal delay-1">Simple. Transparent.<br><em>Fully Via Email.</em></h2>
+  <div class="section-divider reveal delay-2"></div>
+  <p class="section-intro reveal delay-2">Working with me is straightforward, professional, and fully documented. There are no calls and no meetings. Everything happens via email so you always have a written record of every conversation, every strategy, and every deliverable.</p>
+  <div class="how-grid">
+    <div class="how-step reveal">
+      <div class="how-step-num">01</div>
+      <div class="how-step-icon">&#x2709;</div>
+      <div class="how-step-title">Send Your Introduction Email</div>
+      <p class="how-step-desc">Send an email to susangusman8@gmail.com and introduce yourself and your book. Tell me your genre, where you are in your publishing journey, what challenges you are facing, and what goals you want to achieve. Just send an email and we begin.</p>
+    </div>
+    <div class="how-step reveal delay-1">
+      <div class="how-step-num">02</div>
+      <div class="how-step-icon">&#x25CE;</div>
+      <div class="how-step-title">Receive Your Personalized Assessment</div>
+      <p class="how-step-desc">I will review everything you have shared and send you back a detailed personalized assessment of your book's current visibility situation, the opportunities I see, and how I can help you move forward. This assessment is specific to your book and delivered directly to your inbox.</p>
+    </div>
+    <div class="how-step reveal delay-2">
+      <div class="how-step-num">03</div>
+      <div class="how-step-icon">&#x25C8;</div>
+      <div class="how-step-title">Receive Your Custom Strategy Plan</div>
+      <p class="how-step-desc">Once we align on the direction, I build your full custom strategy plan. This is a comprehensive written document that outlines exactly what needs to be done, in what order, and why. Every recommendation is tailored to your book, your genre, your target readers, and your goals.</p>
+    </div>
+    <div class="how-step reveal delay-3">
+      <div class="how-step-num">04</div>
+      <div class="how-step-icon">&#x25B2;</div>
+      <div class="how-step-title">Implementation and Ongoing Support</div>
+      <p class="how-step-desc">We execute the strategy together. You implement with my full written guidance every step of the way. I am available via email to answer questions, review your progress, adjust the strategy as needed, and make sure you are moving in the right direction. All updates are documented.</p>
+    </div>
+    <div class="how-step reveal delay-4">
+      <div class="how-step-num">05</div>
+      <div class="how-step-icon">&#x2605;</div>
+      <div class="how-step-title">Results Review and Next Steps</div>
+      <p class="how-step-desc">At key milestones we review what has been achieved, what the data is showing, and what the next phase of your strategy looks like. You receive a written results summary and updated recommendations so the momentum never stops and your book keeps growing.</p>
+    </div>
+  </div>
+  <div class="how-trust-note reveal">
+    <div class="icon">&#x1F512;</div>
+    <p><strong>Every single step of our work together is communicated and documented through email.</strong> No verbal promises. No forgotten discussions. Everything is in writing, saved, and fully accountable. You will always have a complete record of everything we agreed on and everything that was done.</p>
+  </div>
+</section>
+
+<section id="stats">
+  <div style="text-align:center;">
+    <span class="section-label reveal">By The Numbers</span>
+    <h2 class="section-title reveal delay-1" style="text-align:center;">Real Results for <em>Real Authors</em></h2>
+    <div class="section-divider reveal delay-2" style="margin:1.5rem auto;"></div>
+  </div>
+  <div class="stats-inner" style="margin-top:3rem;">
+    <div class="stat-block reveal">
+      <span class="stat-val" data-count="50">0</span>
+      <span class="stat-lbl">Authors Successfully Served</span>
+    </div>
+    <div class="stat-block reveal delay-1">
+      <span class="stat-val" data-count="100">0</span>
+      <span class="stat-lbl">Books Launched With Strategy</span>
+    </div>
+    <div class="stat-block reveal delay-2">
+      <span class="stat-val" data-count="15">0</span>
+      <span class="stat-lbl">Genres and Niches Covered</span>
+    </div>
+    <div class="stat-block reveal delay-3">
+      <span class="stat-val">5&#x2605;</span>
+      <span class="stat-lbl">Author Satisfaction Rate</span>
+    </div>
+    <div class="stat-block reveal delay-4">
+      <span class="stat-val">100%</span>
+      <span class="stat-lbl">Documented and Accountable</span>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials">
+  <span class="section-label reveal">Author Success Stories</span>
+  <h2 class="section-title reveal delay-1">Authors Who Trusted <em>the Process</em></h2>
+  <div class="section-divider reveal delay-2"></div>
+  <p class="section-intro reveal delay-2">These are real authors who invested in strategy and saw real outcomes. Their books, their words, their results.</p>
+  <div class="testimonials-grid">
+
+    <div class="testimonial-card reveal">
+      <div class="testimonial-quote">"</div>
+      <div class="stars">&#x2605; &#x2605; &#x2605; &#x2605; &#x2605;</div>
+      <p class="testimonial-text">Before working with Susan I had published my book but felt completely invisible. Within weeks of implementing her strategy I started seeing real traction. My book was getting discovered by readers I never would have reached on my own. Susan does not just give you ideas. She gives you a plan, a roadmap, and the confidence to execute it.</p>
+      <div class="book-thumb-wrap">
+        <span class="book-thumb-label">Featured Book</span>
+        <a href="https://www.amazon.com/s?k=Rachael+C+Duncan" target="_blank">
+          <img src="Rachael book.jpg" alt="Rachael C. Duncan Book" class="book-thumb">
+        </a>
+        <a href="https://www.amazon.com/s?k=Rachael+C+Duncan" target="_blank" class="amazon-btn">
+          <span class="amazon-logo">&#x2302;</span> View on Amazon
+        </a>
+      </div>
+      <div class="testimonial-author">
+        <img src="Rachael pic.webp" alt="Rachael C. Duncan" class="author-pic">
+        <div class="author-info">
+          <span class="author-name">Rachael C. Duncan</span>
+          <span class="author-genre">Author</span>
+          <a href="mailto:authorrachaelduncan@gmail.com" class="author-email-link">&#x2709; authorrachaelduncan@gmail.com</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial-card reveal delay-2">
+      <div class="testimonial-quote">"</div>
+      <div class="stars">&#x2605; &#x2605; &#x2605; &#x2605; &#x2605;</div>
+      <p class="testimonial-text">What I appreciated most was that everything was in writing. Every strategy, every recommendation, every update came through email. I always knew exactly what was happening and why. That level of professionalism and accountability is rare and it made all the difference in how I trusted the process and showed up for my book.</p>
+      <div class="book-thumb-wrap">
+        <span class="book-thumb-label">Featured Book</span>
+        <a href="https://www.amazon.com/s?k=Kate+Cullen+author" target="_blank">
+          <img src="Kate book.jpg" alt="Kate Cullen Book" class="book-thumb">
+        </a>
+        <a href="https://www.amazon.com/s?k=Kate+Cullen+author" target="_blank" class="amazon-btn">
+          <span class="amazon-logo">&#x2302;</span> View on Amazon
+        </a>
+      </div>
+      <div class="testimonial-author">
+        <img src="Kate pic.webp" alt="Kate Cullen" class="author-pic">
+        <div class="author-info">
+          <span class="author-name">Kate Cullen</span>
+          <span class="author-genre">Author</span>
+          <a href="mailto:katecullen473@gmail.com" class="author-email-link">&#x2709; katecullen473@gmail.com</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial-card reveal delay-3">
+      <div class="testimonial-quote">"</div>
+      <div class="stars">&#x2605; &#x2605; &#x2605; &#x2605; &#x2605;</div>
+      <p class="testimonial-text">I came to Susan with a book that was getting no traction months after launch. She audited my entire book presence, identified exactly where the gaps were, and gave me a detailed action plan. My visibility improved significantly within the first weeks of implementation. Susan is the kind of specialist every author needs but very few know to look for.</p>
+      <div class="book-thumb-wrap">
+        <span class="book-thumb-label">Featured Book</span>
+        <a href="https://www.amazon.com/s?k=Ottessa+Moshfegh" target="_blank">
+          <img src="Ottessa book.webp" alt="Ottessa Moshfegh Book" class="book-thumb">
+        </a>
+        <a href="https://www.amazon.com/s?k=Ottessa+Moshfegh" target="_blank" class="amazon-btn">
+          <span class="amazon-logo">&#x2302;</span> View on Amazon
+        </a>
+      </div>
+      <div class="testimonial-author">
+        <img src="Ottessa pic.webp" alt="Ottessa Moshfegh" class="author-pic">
+        <div class="author-info">
+          <span class="author-name">Ottessa Moshfegh</span>
+          <span class="author-genre">Author</span>
+          <a href="mailto:author.ottessa.moshfegh1@gmail.com" class="author-email-link">&#x2709; author.ottessa.moshfegh1@gmail.com</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="books">
+  <span class="section-label reveal">Portfolio</span>
+  <h2 class="section-title reveal delay-1">Books That Went From <em>Invisible to Unstoppable</em></h2>
+  <div class="section-divider reveal delay-2"></div>
+  <p class="section-intro reveal delay-2">These are titles that went through the strategic visibility process. Each one had a story worth telling. Strategy made sure the right readers found it.</p>
+  <div class="books-grid" style="margin-top:3rem;">
+    <div class="book-card reveal">
+      <div class="book-cover-wrap">
+        <img src="Rachael book.jpg" alt="Rachael C. Duncan Book">
+        <div class="book-cover-overlay">
+          <a href="https://www.amazon.com/s?k=Rachael+C+Duncan" target="_blank" class="amazon-btn">View on Amazon</a>
+        </div>
+      </div>
+      <div class="book-card-name">Rachael C. Duncan</div>
+      <div class="book-card-author">Featured Author</div>
+    </div>
+    <div class="book-card reveal delay-1">
+      <div class="book-cover-wrap">
+        <img src="Kate book.jpg" alt="Kate Cullen Book">
+        <div class="book-cover-overlay">
+          <a href="https://www.amazon.com/s?k=Kate+Cullen+author" target="_blank" class="amazon-btn">View on Amazon</a>
+        </div>
+      </div>
+      <div class="book-card-name">Kate Cullen</div>
+      <div class="book-card-author">Featured Author</div>
+    </div>
+    <div class="book-card reveal delay-2">
+      <div class="book-cover-wrap">
+        <img src="Ottessa book.webp" alt="Ottessa Moshfegh Book">
+        <div class="book-cover-overlay">
+          <a href="https://www.amazon.com/s?k=Ottessa+Moshfegh" target="_blank" class="amazon-btn">View on Amazon</a>
+        </div>
+      </div>
+      <div class="book-card-name">Ottessa Moshfegh</div>
+      <div class="book-card-author">Featured Author</div>
+    </div>
+  </div>
+</section>
+
+<div id="mid-banner">
+  <div class="mid-banner-grid">
+    <div class="mid-banner-image reveal-left">
+      <img src="susan gusman.png" alt="Susan Gusman">
+    </div>
+    <div class="reveal-right">
+      <span class="section-label">The Philosophy</span>
+      <blockquote class="mid-banner-quote">"Every book has a reader.<br>My job is to make sure <strong>they find each other.</strong>"</blockquote>
+      <p class="mid-banner-sub">When you work with me, you are not just getting a consultant. You are getting a dedicated strategist who is invested in your book's success from the first email to the final result. Every decision we make is documented, strategic, and built around your specific goals.</p>
+      <div class="section-divider" style="margin-top:2rem;"></div>
+      <a href="mailto:susangusman8@gmail.com?subject=Ready%20to%20Work%20Together" class="btn-primary" style="margin-top:1.5rem; display:inline-flex;">
+        <span>&#x2709; Email Susan Today</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<section id="faq">
+  <span class="section-label reveal">FAQ</span>
+  <h2 class="section-title reveal delay-1">Everything You Need to Know<br><em>Before Getting Started</em></h2>
+  <div class="section-divider reveal delay-2"></div>
+  <div class="faq-grid reveal">
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Why is everything done through email? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Email keeps every conversation documented, searchable, and accountable. When we communicate in writing, there are no misunderstandings, no forgotten agreements, and no vague promises. You always have a full record of what was discussed, what was decided, and what was delivered. It is the most professional and transparent way to work.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">How do I get started? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Send an email to susangusman8@gmail.com and introduce yourself and your book. Tell me where you are in your publishing journey, what challenges you are facing, and what you want to achieve. I will respond with a personalized assessment and we go from there.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Do you work with first-time authors? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Absolutely. First-time authors are some of my favorite clients to work with because the opportunity to build a strong foundation from the start makes a huge difference. Whether you are pre-launch, just launched, or trying to revive a book that did not get the attention it deserved, I can help.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">What genres do you work with? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Fiction, non-fiction, self-help, business, memoir, children's books, thriller, romance, fantasy, personal development, and more. If you wrote a book and want more people to read it, I can help you reach them with a targeted, professional strategy built specifically for your genre.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">How long does it take to see results? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Most authors begin seeing meaningful visibility improvements within 4 to 8 weeks of implementing the strategy. The timeline depends on your starting point, your genre, and how consistently the strategy is executed. I set realistic expectations from the beginning and document every milestone along the way.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Is this only for self-published authors? <span class="faq-icon">+</span></div>
+      <div class="faq-a">No. I work with self-published authors, hybrid authors, and traditionally published authors who want to take a more active role in their book's visibility and sales. The strategy always adapts to your publishing situation and your specific goals.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">What makes your approach different? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Three things. First, everything is fully customized to your specific book, genre, and audience. Second, everything is done through email so it is all documented and accountable. Third, I focus on sustainable visibility and long-term results, not short-term spikes that disappear after a week.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Can you help with a book already published? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Yes. Many of my clients come to me months or even years after publishing because their book never got the visibility it deserved. It is never too late to build a strategy and turn things around. A full audit and fresh strategy can revive a book at any stage of its life.</div>
+    </div>
+  </div>
+</section>
+
+<section id="resource">
+  <div class="resource-inner">
+    <div class="reveal-left">
+      <span class="section-label">Free for Authors</span>
+      <h2 class="section-title">Get the Free Guide<br><em>That Changes Everything</em></h2>
+      <div class="section-divider"></div>
+      <p class="section-intro">This free guide breaks down the five most powerful strategies I use with my author clients to increase their book's visibility, attract more readers, and build lasting momentum. No fluff. No generic advice. Real strategies that work.</p>
+    </div>
+    <div class="resource-box reveal-right">
+      <div class="resource-title"><em>"5 Proven Strategies to Maximize Your Book Visibility Right Now"</em></div>
+      <p class="resource-desc">A practical, specific, and actionable guide written for authors who are serious about their book's success. Inside you will find the exact frameworks I use with every author I work with.</p>
+      <ul class="resource-steps">
+        <li>How to identify exactly where your readers are and how to reach them</li>
+        <li>The one messaging mistake that kills most book sales before they start</li>
+        <li>How to build visibility that lasts beyond launch week</li>
+        <li>The author brand framework that turns readers into loyal fans</li>
+        <li>How to optimize your book listing to convert browsers into buyers</li>
+      </ul>
+      <a href="mailto:susangusman8@gmail.com?subject=FREE%20VISIBILITY%20GUIDE&body=Hi%20Susan%2C%20I%20would%20like%20to%20receive%20the%20free%20visibility%20guide." class="btn-primary" style="display:inline-flex;">
+        <span>&#x2709; Send Me the Free Guide</span>
+      </a>
+      <p style="font-size:0.72rem; color:var(--text-mid); margin-top:1rem;">Email Susan with subject: FREE VISIBILITY GUIDE and receive it directly in your inbox.</p>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <span class="section-label reveal">Get In Touch</span>
+  <h2 class="section-title reveal delay-1">Your Book's Next Chapter<br><em>Starts With One Email</em></h2>
+  <div class="section-divider reveal delay-2"></div>
+  <div class="contact-inner">
+    <div class="contact-info reveal-left">
+      <p>Whether you are preparing to launch, already published and looking for more visibility, or simply ready to take your book seriously, the first step is reaching out. Tell me about your book and your goals and let us build something powerful together.</p>
+      <p>All conversations are handled through email. Everything is documented. Everything is accountable. You will always know exactly where things stand.</p>
+      <a href="mailto:susangusman8@gmail.com" class="contact-detail" style="color:inherit;">
+        <div class="contact-detail-icon">&#x2709;</div>
+        <div class="contact-detail-text">
+          <span class="contact-detail-label">Email Susan Directly</span>
+          <span class="contact-detail-value">susangusman8@gmail.com</span>
+        </div>
+      </a>
+      <div class="contact-detail" style="cursor:default;">
+        <div class="contact-detail-icon">&#x1F4C4;</div>
+        <div class="contact-detail-text">
+          <span class="contact-detail-label">Communication Method</span>
+          <span class="contact-detail-value">Email Only - Fully Documented</span>
+        </div>
+      </div>
+      <div class="contact-detail" style="cursor:default;">
+        <div class="contact-detail-icon">&#x26A1;</div>
+        <div class="contact-detail-text">
+          <span class="contact-detail-label">Response Time</span>
+          <span class="contact-detail-value">Prompt and Professional</span>
+        </div>
+      </div>
+    </div>
+    <div class="reveal-right">
+      <form class="contact-form" action="https://formspree.io/f/myknwpel" method="POST" id="contactForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fname">First Name</label>
+            <input type="text" id="fname" name="first_name" placeholder="Your first name" required>
+          </div>
+          <div class="form-group">
+            <label for="lname">Last Name</label>
+            <input type="text" id="lname" name="last_name" placeholder="Your last name" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="your@email.com" required>
+        </div>
+        <div class="form-group">
+          <label for="genre">Book Genre</label>
+          <select id="genre" name="genre">
+            <option value="">Select your genre</option>
+            <option>Fiction</option>
+            <option>Non-Fiction</option>
+            <option>Self-Help</option>
+            <option>Business</option>
+            <option>Memoir</option>
+            <option>Thriller</option>
+            <option>Romance</option>
+            <option>Fantasy</option>
+            <option>Children's Book</option>
+            <option>Personal Development</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="status">Publishing Status</label>
+          <select id="status" name="status">
+            <option value="">Where are you in your journey?</option>
+            <option>Pre-Launch (not yet published)</option>
+            <option>Recently Published (0-6 months)</option>
+            <option>Published (6+ months ago)</option>
+            <option>Multiple Books Published</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Tell Me About Your Book and Goals</label>
+          <textarea id="message" name="message" rows="5" placeholder="Share your book title, what you want to achieve, and any specific challenges you are facing..." required></textarea>
+        </div>
+        <div class="form-note">
+          All information shared is kept confidential and used solely to build your personalized strategy. Every response is documented and handled with full professionalism.
+        </div>
+        <input type="hidden" name="_subject" value="New Author Inquiry via SusanGusman.com">
+        <button type="submit" class="btn-primary" style="width:100%; justify-content:center; border:none; cursor:pointer;">
+          <span>&#x2709; Send My Inquiry to Susan</span>
+        </button>
+        <div class="form-success" id="formSuccess">
+          Thank you for reaching out. Your message has been sent directly to Susan's inbox. She will review your inquiry and respond promptly with your personalized assessment.
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<div id="final-cta">
+  <div class="final-cta-bg-img">
+    <img src="susan gusman.png" alt="Susan Gusman">
+  </div>
+  <div class="final-cta-overlay"></div>
+  <div class="final-cta-inner reveal">
+    <span class="section-label" style="display:block; text-align:center;">Take the First Step</span>
+    <h2 class="section-title" style="text-align:center;">Ready to Make Your<br><em>Book Shine?</em></h2>
+    <p class="final-cta-sub">The authors who succeed are not always the most talented writers. They are the ones who invest in strategy, visibility, and professional guidance. One email is all it takes to begin building your book's future.</p>
+    <a href="mailto:susangusman8@gmail.com?subject=I%20Am%20Ready%20to%20Make%20My%20Book%20Shine" class="btn-primary" style="display:inline-flex; font-size:0.8rem;">
+      <span>&#x2709; Email Susan Now: susangusman8@gmail.com</span>
+    </a>
+    <div style="display:flex; justify-content:center; gap:3rem; margin-top:3rem; flex-wrap:wrap;">
+      <div class="hero-trust-item" style="color:var(--text-light);">50+ Authors Served</div>
+      <div class="hero-trust-item" style="color:var(--text-light);">100+ Books Launched</div>
+      <div class="hero-trust-item" style="color:var(--text-light);">5-Star Results</div>
+      <div class="hero-trust-item" style="color:var(--text-light);">Fully Documented</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo">Susan Gusman</div>
+      <p class="footer-tagline">Strategic Book Specialist helping authors maximize their book visibility, grow their audience, and turn their work into lasting success.</p>
+      <a href="mailto:susangusman8@gmail.com" class="footer-email">&#x2709; susangusman8@gmail.com</a>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul class="footer-links">
+        <li><a href="#services">Book Visibility Strategy</a></li>
+        <li><a href="#services">Author Brand Building</a></li>
+        <li><a href="#services">Book Launch Planning</a></li>
+        <li><a href="#services">Audience Growth</a></li>
+        <li><a href="#services">Sales Optimization</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <ul class="footer-links">
+        <li><a href="#about">About Susan</a></li>
+        <li><a href="#how">The Process</a></li>
+        <li><a href="#testimonials">Author Stories</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#resource">Free Guide</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2025 Susan Gusman. Strategic Book Specialist. All rights reserved.</p>
+    <div class="footer-stars">&#x2605; &#x2605; &#x2605; &#x2605; &#x2605; Trusted by Authors Worldwide</div>
+  </div>
+</footer>
+
+<script>
+  window.addEventListener('load', () => {
+    setTimeout(() => { document.getElementById('preloader').classList.add('hide'); }, 2000);
+  });
+
+  const cursor = document.getElementById('cursor');
+  const follower = document.getElementById('cursorFollower');
+  let mouseX = 0, mouseY = 0, followerX = 0, followerY = 0;
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top = mouseY + 'px';
+  });
+  function animateFollower() {
+    followerX += (mouseX - followerX) * 0.12;
+    followerY += (mouseY - followerY) * 0.12;
+    follower.style.left = followerX + 'px';
+    follower.style.top = followerY + 'px';
+    requestAnimationFrame(animateFollower);
+  }
+  animateFollower();
+  document.querySelectorAll('a, button, .faq-item').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%,-50%) scale(2)'; follower.style.opacity = '0.2'; });
+    el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1)'; follower.style.opacity = '0.5'; });
+  });
+
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  function openMobileNav() { document.getElementById('mobileNav').classList.add('open'); }
+  function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); }
+
+  const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  revealEls.forEach(el => observer.observe(el));
+
+  function countUp(el) {
+    const target = parseInt(el.dataset.count);
+    if (!target) return;
+    let current = 0;
+    const step = Math.ceil(target / 50);
+    const interval = setInterval(() => {
+      current = Math.min(current + step, target);
+      el.textContent = current + '+';
+      if (current >= target) clearInterval(interval);
+    }, 30);
+  }
+  const countObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { countUp(e.target); countObserver.unobserve(e.target); } });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-count]').forEach(el => countObserver.observe(el));
+
+  function toggleFaq(el) {
+    const wasActive = el.classList.contains('active');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+    if (!wasActive) el.classList.add('active');
+  }
+
+  const form = document.getElementById('contactForm');
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('button[type=submit]');
+      btn.querySelector('span').textContent = 'Sending...';
+      btn.style.opacity = '0.7';
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          form.reset();
+          btn.style.display = 'none';
+          document.getElementById('formSuccess').style.display = 'block';
+        } else {
+          btn.querySelector('span').textContent = 'Try Again';
+          btn.style.opacity = '1';
+        }
+      } catch {
+        btn.querySelector('span').textContent = 'Try Again';
+        btn.style.opacity = '1';
+      }
+    });
+  }
+
+  window.addEventListener('scroll', () => {
+    const heroImg = document.querySelector('.hero-image-col img');
+    if (heroImg) heroImg.style.transform = `translateY(${window.scrollY * 0.15}px)`;
+  });
+</script>
+</body>
+</html>
